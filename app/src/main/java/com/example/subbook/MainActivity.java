@@ -93,9 +93,9 @@ public class MainActivity extends AppCompatActivity {
                 new Subscription("Sub Object 13", date1, 30),
         };
 
-        //subscriptionList = (ListView) findViewById(R.id.recipe_list_view);      // Internet
-        //ListAdapter myListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, subscriptionList);
-        ArrayAdapter<Subscription> myListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, subscriptionList);
+        //ArrayAdapter<Subscription> myListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, subscriptionList);
+        ArrayAdapter<Subscription> myListAdapter = new SubscriptionRowAdapter(this, subscriptionList);
+
 
         // () --> guy referred to this as "type cast"
         ListView myListView = findViewById(R.id.myListView);
@@ -127,7 +127,11 @@ public class MainActivity extends AppCompatActivity {
                 // Start new activity --> slightly modified by me to allow myself to pass subscription object into
                 // new activity
                 Intent viewSubscriptionIntent = new Intent(MainActivity.this, ViewSubscription.class);
-                //To pass:
+
+                // How to pass object into another activity:
+                // https://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android
+                // user's Samuh, Peter Mortensen, Mustafa Güven
+                // 2018/01/29
                 viewSubscriptionIntent.putExtra("Selected_Subscription", selectedItem);
                 startActivity(viewSubscriptionIntent);
 

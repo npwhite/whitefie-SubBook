@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class Subscription implements Serializable{
     private String name;            // up to 20 chars
     private Date dateStarted;       // presented in yyyy-mm-dd
-    private int monthlyCharge;      // non-negative currency value, in Canadian dollars
+    private double monthlyCharge;      // non-negative currency value, in Canadian dollars
     private String comment;         // Optional entry: up to 30 chars
 
     public Subscription(String name, Date dateStarted, int monthlyCharge) {
@@ -30,6 +30,11 @@ public class Subscription implements Serializable{
         this.comment = comment;
     }
 
+    public String toString() {
+        return this.name + " " + (this.dateStarted).toString();
+
+    }
+
     public String getName() {
         return this.name;
     }
@@ -38,7 +43,7 @@ public class Subscription implements Serializable{
         return this.dateStarted;
     }
 
-    public int getMonthlyCharge() {
+    public double getMonthlyCharge() {
         return this.monthlyCharge;
     }
 
