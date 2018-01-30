@@ -1,6 +1,9 @@
 package com.example.subbook;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
+
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +22,27 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+/*
+
+    --> Alright, So far I have a simple list app that displays strings, allows them to be clicked,
+        and a new page will open up (a new activity)
+    --> I should probably consider this to be practice, as most of what I have added was copied
+        from examples online
+    --> Need to do:
+          * make list hold Subscription objects
+          * clicking on Subscription object opens proper view for that object
+          * + symbol opens window to create new Subscription
+
+        Should do:
+          * check user input to make sure it meets constraints
+
+
+
+
+
+ */
+
+
 public class MainActivity extends AppCompatActivity {
 
     //private ListView subscriptionList;
@@ -30,9 +54,11 @@ public class MainActivity extends AppCompatActivity {
     // --> simple_list_item_1 is just a default list view output in the layout xml file
     // --> String indicated that the array contains strings
     // listAdapter converts array into something that can be viewed as a List
-    private String[] subscriptionList = {"Subscription 1", "Subscription 2", "Subscription 3",
-        "Subscription 4", "Subscription 5", "Subscription 6", "Subscription 7", "Subscription 8",
-        "Subscription 9", "Subscription 10", "Subscription 11", "Subscription 12", "Subscription 13"};
+//    private String[] subscriptionList = {"Subscription 1", "Subscription 2", "Subscription 3",
+//        "Subscription 4", "Subscription 5", "Subscription 6", "Subscription 7", "Subscription 8",
+//        "Subscription 9", "Subscription 10", "Subscription 11", "Subscription 12", "Subscription 13"};
+    //private ArrayList<Subscription> subscriptionList;
+
 //    ListAdapter myListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, subscriptionList);
 //    // () --> guy referred to this as "type cast"
 //    ListView myListView = (ListView) findViewById(R.id.myListView);
@@ -47,8 +73,30 @@ public class MainActivity extends AppCompatActivity {
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
+        //Test Subscription 1
+        Date date1 = new Date();
+        //Subscription sub1 = new Subscription("Sub object 1", date1, 10);
+        //subscriptionList.add(sub1);
+        Subscription[] subscriptionList = {
+                new Subscription("Sub Object 1", date1, 10),
+                new Subscription("Sub Object 2", date1, 15),
+                new Subscription("Sub Object 3", date1, 30),
+                new Subscription("Sub Object 4", date1, 30),
+                new Subscription("Sub Object 5", date1, 30),
+                new Subscription("Sub Object 6", date1, 30),
+                new Subscription("Sub Object 7", date1, 30),
+                new Subscription("Sub Object 8", date1, 30),
+                new Subscription("Sub Object 9", date1, 30),
+                new Subscription("Sub Object 10", date1, 30),
+                new Subscription("Sub Object 11", date1, 30),
+                new Subscription("Sub Object 12", date1, 30),
+                new Subscription("Sub Object 13", date1, 30),
+        };
+
         //subscriptionList = (ListView) findViewById(R.id.recipe_list_view);      // Internet
-        ListAdapter myListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, subscriptionList);
+        //ListAdapter myListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, subscriptionList);
+        ArrayAdapter<Subscription> myListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, subscriptionList);
+
         // () --> guy referred to this as "type cast"
         ListView myListView = findViewById(R.id.myListView);
         myListView.setAdapter(myListAdapter);
@@ -64,14 +112,25 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // example on how to set a click listener onto a ListView/AdapterView
-        // https://android--code.blogspot.ca/2015/08/android-listview-item-click.html 2018/01/29
+        // https://android--code.blogspot.ca/2015/08/android-listview-item-click.html 2018/01/28
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String selectedItem = (String) adapterView.getItemAtPosition(i);
-                Log.d("ITEM_SELECTED", "The item selected was: " + selectedItem);
+                Subscription selectedItem = (Subscription) adapterView.getItemAtPosition(i);
+                String itemName = selectedItem.getName();
+                Log.d("ITEM_SELECTED", "The item selected was: " + itemName);
          //==============
-                startActivity(new Intent(MainActivity.this, ViewSubscription.class));
+                // https://stackoverflow.com/questions/24610527/how-do-i-get-a-button-to-open-another-activity-in-android-studio
+                // how to start a new Activity 2018/01/28
+                //startActivity(new Intent(MainActivity.this, ViewSubscription.class));
+
+                // Start new activity --> slightly modified by me to allow myself to pass subscription object into
+                // new activity
+                Intent viewSubscriptionIntent = new Intent(MainActivity.this, ViewSubscription.class);
+                //To pass:
+                viewSubscriptionIntent.putExtra("Selected_Subscription", selectedItem);
+                startActivity(viewSubscriptionIntent);
+
 
 
             }
