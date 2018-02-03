@@ -14,6 +14,8 @@ public class Subscription implements Serializable{
     private double monthlyCharge;      // non-negative currency value, in Canadian dollars
     private String comment;         // Optional entry: up to 30 chars
 
+    private int listViewPosition;
+
     public Subscription(String name, Date dateStarted, int monthlyCharge) {
         // Constructor
         this.name = name;
@@ -35,6 +37,7 @@ public class Subscription implements Serializable{
 
     }
 
+    /* getters */
     public String getName() {
         return this.name;
     }
@@ -47,9 +50,36 @@ public class Subscription implements Serializable{
         return this.monthlyCharge;
     }
 
-    public String comment() {
+    public String getComment() {
         return this.comment;
     }
+
+    public int getListViewPosition() {
+        return listViewPosition;
+    }
+
+    /* setters */
+    public void changeName(String newName) {
+        this.name = newName;
+    }
+
+    public void changeDate(Date newDate) {
+        this.dateStarted = newDate;
+    }
+
+    public void setMonthlyCharge(double newMonthlyCharge) {
+        this.monthlyCharge = newMonthlyCharge;
+    }
+
+    public void setComment(String newComment) {
+        this.comment = newComment;
+    }
+
+    public void setListViewPosition(int position) {
+        this.listViewPosition = position;
+    }
+
+
 
 
 

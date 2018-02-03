@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -77,6 +78,9 @@ public class MainActivity extends AppCompatActivity {
         Date date1 = new Date();
         //Subscription sub1 = new Subscription("Sub object 1", date1, 10);
         //subscriptionList.add(sub1);
+
+        // make subscription a constructor variable
+        // this.subscription
         Subscription[] subscriptionList = {
                 new Subscription("Sub Object 1", date1, 10),
                 new Subscription("Sub Object 2", date1, 15),
@@ -117,8 +121,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Subscription selectedItem = (Subscription) adapterView.getItemAtPosition(i);
+                selectedItem.setListViewPosition(i);
+
                 String itemName = selectedItem.getName();
-                Log.d("ITEM_SELECTED", "The item selected was: " + itemName);
+                Log.d("ITEM_SELECTED", "The item selected was" + itemName);
+                Log.d("ITEM_POSITION", "The item position is" + i);
          //==============
                 // https://stackoverflow.com/questions/24610527/how-do-i-get-a-button-to-open-another-activity-in-android-studio
                 // how to start a new Activity 2018/01/28
@@ -126,20 +133,83 @@ public class MainActivity extends AppCompatActivity {
 
                 // Start new activity --> slightly modified by me to allow myself to pass subscription object into
                 // new activity
-                Intent viewSubscriptionIntent = new Intent(MainActivity.this, ViewSubscription.class);
+                //*Intent viewSubscriptionIntent = new Intent(MainActivity.this, ViewSubscription.class);
 
                 // How to pass object into another activity:
                 // https://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android
                 // user's Samuh, Peter Mortensen, Mustafa Güven
                 // 2018/01/29
-                viewSubscriptionIntent.putExtra("Selected_Subscription", selectedItem);
-                startActivity(viewSubscriptionIntent);
+                //-->viewSubscriptionIntent.putExtra("Selected_Subscription", selectedItem);
+                //-->startActivity(viewSubscriptionIntent);
 
+
+
+
+                // ---> newest attempt --> not working. try to fix
+                // http://www.coderzheaven.com/2013/03/24/pass-object-finishing-activity-previous-activity-android/
+                //*viewSubscriptionIntent.putExtra("Selected_Subscription", selectedItem);
+                //*startActivityForResult(viewSubscriptionIntent, 1);
+                //Log.d("RETURN", "returned from view subscription activity");
+
+                // http://www.coderzheaven.com/2013/03/24/pass-object-finishing-activity-previous-activity-android/
+                // 2018/02/02 (yyyy/mm/dd)
+                Intent intent = new Intent(MainActivity.this, ViewSubscription.class);
+                intent.putExtra("myobject", selectedItem);
+                startActivityForResult(intent, 1);
 
 
             }
         });
 
+
+    }
+
+
+    /*
+     Called when an activity returns to its previous activity
+     https://stackoverflow.com/questions/11946271/android-detect-when-an-activity-returns-to-the-previous-activity
+     User: JiTHiN
+     2018/02/02 (yyyy/mm/dd)
+    */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("RETURN", "returned from view subscription activity");
+        //Subscription editedItem = (Subscription) getIntent().getSerializableExtra("edited_Subscription");
+        //String nameText = (String) editedItem.getName();
+        //Log.d("MAIN ACT", nameText);
+
+    }
+
+    // http://www.coderzheaven.com/2013/03/24/pass-object-finishing-activity-previous-activity-android/
+    // 2018/02/02 (yyyy/mm/dd)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                Bundle b = data.getExtras();
+                if (b != null) {
+                    Subscription selectedItem = (Subscription) b.getSerializable("Obj");
+                    Log.d("ON_ACTIVITY_RESULT", selectedItem.getName());
+                }
+                else if (resultCode == 0) {
+                    //do something
+                }
+            }
+        }
+
+
+    }//onActivityResult
+
+    /*
+    replace old subscription with edited subscription in its original position
+     */
+    private Subscription[] updateSubscriptionList(Subscription[] subscriptions, Subscription editedSubscription) {
+
+        int position = editedSubscription.getListViewPosition();
+        subscriptions[position] = editedSubscription;
+        return subscriptions;
 
     }
 
