@@ -22,7 +22,7 @@ public class Subscription implements Serializable{
     private int wasEdited;
 
 
-    public Subscription(String name, Date dateStarted, int monthlyCharge) {
+    public Subscription(String name, Date dateStarted, Double monthlyCharge) {
         // Constructor
         this.name = name;
         this.dateStarted = dateStarted;
@@ -31,7 +31,7 @@ public class Subscription implements Serializable{
 
     }
 
-    public Subscription(String name, Date dateStarted, int monthlyCharge, String comment) {
+    public Subscription(String name, Date dateStarted, Double monthlyCharge, String comment) {
         this.name = name;
         this.dateStarted = dateStarted;
         this.monthlyCharge = monthlyCharge;

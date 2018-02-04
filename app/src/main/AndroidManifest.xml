@@ -19,7 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ViewSubscription"></activity>
+        <activity android:name=".ViewSubscription" />
+        <activity android:name=".Add_Subscription" />
+        <activity android:name=".AddSubscription"></activity>
     </application>
 
 </manifest>

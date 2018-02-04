@@ -129,22 +129,22 @@ public class MainActivity extends AppCompatActivity {
 //        };
 
 
-        addSubscription(new Subscription("Subscription 0", date1, 10));
+        addSubscription(new Subscription("Netflix", date1, 9.99));
         //Log.d("UPDATE_MONTHLY_TOTAL", "new total = " + this.monthlyTotal);
-        addSubscription(new Subscription("Subscription 1", date1, 15));
-        //Log.d("UPDATE_MONTHLY_TOTAL", "new total = " + this.monthlyTotal);
-        addSubscription(new Subscription("Subscription 2", date1, 30));
-        //Log.d("UPDATE_MONTHLY_TOTAL", "new total = " + this.monthlyTotal);
-        addSubscription(new Subscription("Subscription 3", date1, 30));
-        addSubscription(new Subscription("Subscription 4", date1, 30));
-        addSubscription(new Subscription("Subscription 5", date1, 30));
-        addSubscription(new Subscription("Subscription 6", date1, 30));
-        addSubscription(new Subscription("Subscription 7", date1, 30));
-        addSubscription(new Subscription("Subscription 8", date1, 30));
-        addSubscription(new Subscription("Subscription 9", date1, 30));
-        addSubscription(new Subscription("Subscription 10", date1, 30));
-        addSubscription(new Subscription("Subscription 11", date1, 30));
-        addSubscription(new Subscription("Subscription 12", date1, 30));
+//        addSubscription(new Subscription("Subscription 1", date1, 15.0));
+//        //Log.d("UPDATE_MONTHLY_TOTAL", "new total = " + this.monthlyTotal);
+//        addSubscription(new Subscription("Subscription 2", date1, 30.0));
+//        //Log.d("UPDATE_MONTHLY_TOTAL", "new total = " + this.monthlyTotal);
+//        addSubscription(new Subscription("Subscription 3", date1, 30.0));
+//        addSubscription(new Subscription("Subscription 4", date1, 30.));
+//        addSubscription(new Subscription("Subscription 5", date1, 30.0));
+//        addSubscription(new Subscription("Subscription 6", date1, 30.0));
+//        addSubscription(new Subscription("Subscription 7", date1, 30.0));
+//        addSubscription(new Subscription("Subscription 8", date1, 30.0));
+//        addSubscription(new Subscription("Subscription 9", date1, 30.0));
+//        addSubscription(new Subscription("Subscription 10", date1, 30.0));
+//        addSubscription(new Subscription("Subscription 11", date1, 30.0));
+//        addSubscription(new Subscription("Subscription 12", date1, 30.0));
 
 //        subscriptionList.add(new Subscription("wew", date1, 10));
         //ArrayAdapter<Subscription> myListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, subscriptionList);
@@ -158,11 +158,16 @@ public class MainActivity extends AppCompatActivity {
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                Intent addSubscriptionIntent = new Intent(MainActivity.this, AddSubscription.class);
+//                startActivity(new Intent(MainActivity.this, AddSubscription.class));
+                startActivityForResult(addSubscriptionIntent, 2);
+
             }
         });
 
@@ -238,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
+        if (requestCode == 1) { //requesting view subscription
             if (resultCode == Activity.RESULT_OK) {
                 Bundle b = data.getExtras();
                 if (b != null) {
@@ -258,9 +263,26 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 else if (resultCode == 0) {
-                    //do something
+                    // do something
                 }
             }
+        }
+
+        else if (requestCode == 2) {    // requesting add subscription
+            if (resultCode == Activity.RESULT_OK) {     // the user added a subscription SUCCESSFULLY
+                Bundle b = data.getExtras();
+                if (b != null) {
+                    Subscription newSubscription = (Subscription) b.getSerializable("newSubscription");
+                    addSubscription(newSubscription);
+                    this.myListAdapter.notifyDataSetChanged();
+                }
+
+            }
+            else if(resultCode == Activity.RESULT_CANCELED) {   // the user BACKED OUT
+                // do something
+            }
+
+
         }
 
 
