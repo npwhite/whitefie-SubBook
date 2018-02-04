@@ -1,3 +1,9 @@
+/*
+followed this guide on sending objects to/from activities
+http://www.coderzheaven.com/2013/03/24/pass-object-finishing-activity-previous-activity-android/
+2018/02/02 (yyyy/mm/dd)
+ */
+
 package com.example.subbook;
 
 import android.app.Activity;
@@ -53,6 +59,7 @@ public class ViewSubscription extends AppCompatActivity {
 
                 String newName = subText.getText().toString();
                 selectedItem.changeName(newName);
+                selectedItem.setWasEdited(1);
                 Log.d("new name saved", selectedItem.getName());
                 //Intent editedSubscriptionIntent = new Intent(ViewSubscription.this, MainActivity.class);
 
@@ -68,6 +75,11 @@ public class ViewSubscription extends AppCompatActivity {
                 //finish();
                 //startActivity(editedSubscriptionIntent);
 
+                Intent intent = new Intent();
+                intent.putExtra("Obj", selectedItem);
+                setResult(Activity.RESULT_OK, intent);
+
+                finish();
             }
 
 

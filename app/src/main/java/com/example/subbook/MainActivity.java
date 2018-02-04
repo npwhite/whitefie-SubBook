@@ -25,26 +25,54 @@ import android.widget.Toast;
 
 /*
 
-    --> Alright, So far I have a simple list app that displays strings, allows them to be clicked,
-        and a new page will open up (a new activity)
+    --> PL WARNING
     --> I should probably consider this to be practice, as most of what I have added was copied
         from examples online
     --> Need to do:
-          * make list hold Subscription objects
           * clicking on Subscription object opens proper view for that object
           * + symbol opens window to create new Subscription
 
         Should do:
           * check user input to make sure it meets constraints
 
-
-
-
-
  */
 
 
 public class MainActivity extends AppCompatActivity {
+
+    //private  ArrayList<Subscription>  subscriptionList;
+
+    /*
+    Fixes problem when trying to add object to null array list
+    https://stackoverflow.com/questions/28409089/nullpointerexception-when-adding-an-object-to-arraylist-in-android\
+    2018/02/03 (yyyy/mm/dd)
+    Jens
+     */
+    private ArrayList<Subscription> subscriptionList = new ArrayList<Subscription>();     // need to initialize first
+    private int monthlyTotal;
+    private ArrayAdapter<Subscription> myListAdapter; //= new SubscriptionRowAdapter(this, subscriptionList);
+
+    //Date date1 = new Date();
+
+//    public MainActivity() {
+//        //this.subscriptionList = {new Subscription("Sub Object 1", date1, 10)};
+//        this.subscriptionList = {
+//                new Subscription("Sub Object 1", date1, 10),
+//                new Subscription("Sub Object 2", date1, 15),
+//                new Subscription("Sub Object 3", date1, 30),
+//                new Subscription("Sub Object 4", date1, 30),
+//                new Subscription("Sub Object 5", date1, 30),
+//                new Subscription("Sub Object 6", date1, 30),
+//                new Subscription("Sub Object 7", date1, 30),
+//                new Subscription("Sub Object 8", date1, 30),
+//                new Subscription("Sub Object 9", date1, 30),
+//                new Subscription("Sub Object 10", date1, 30),
+//                new Subscription("Sub Object 11", date1, 30),
+//                new Subscription("Sub Object 12", date1, 30),
+//                new Subscription("Sub Object 13", date1, 30),
+//        };
+//    }
+
 
     //private ListView subscriptionList;
 
@@ -71,34 +99,57 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
         //Test Subscription 1
-        Date date1 = new Date();
+        //Date date1 = new Date();
         //Subscription sub1 = new Subscription("Sub object 1", date1, 10);
         //subscriptionList.add(sub1);
 
         // make subscription a constructor variable
         // this.subscription
-        Subscription[] subscriptionList = {
-                new Subscription("Sub Object 1", date1, 10),
-                new Subscription("Sub Object 2", date1, 15),
-                new Subscription("Sub Object 3", date1, 30),
-                new Subscription("Sub Object 4", date1, 30),
-                new Subscription("Sub Object 5", date1, 30),
-                new Subscription("Sub Object 6", date1, 30),
-                new Subscription("Sub Object 7", date1, 30),
-                new Subscription("Sub Object 8", date1, 30),
-                new Subscription("Sub Object 9", date1, 30),
-                new Subscription("Sub Object 10", date1, 30),
-                new Subscription("Sub Object 11", date1, 30),
-                new Subscription("Sub Object 12", date1, 30),
-                new Subscription("Sub Object 13", date1, 30),
-        };
+         Date date1 = new Date();
 
+//        Subscription[] subscriptionList = {
+//                new Subscription("wew", date1, 10),
+//                new Subscription("Sub Object 2", date1, 15),
+//                new Subscription("Sub Object 3", date1, 30),
+//                new Subscription("Sub Object 4", date1, 30),
+//                new Subscription("Sub Object 5", date1, 30),
+//                new Subscription("Sub Object 6", date1, 30),
+//                new Subscription("Sub Object 7", date1, 30),
+//                new Subscription("Sub Object 8", date1, 30),
+//                new Subscription("Sub Object 9", date1, 30),
+//                new Subscription("Sub Object 10", date1, 30),
+//                new Subscription("Sub Object 11", date1, 30),
+//                new Subscription("Sub Object 12", date1, 30),
+//                new Subscription("Sub Object 13", date1, 30),
+//        };
+
+
+        addSubscription(new Subscription("Subscription 0", date1, 10));
+        //Log.d("UPDATE_MONTHLY_TOTAL", "new total = " + this.monthlyTotal);
+        addSubscription(new Subscription("Subscription 1", date1, 15));
+        //Log.d("UPDATE_MONTHLY_TOTAL", "new total = " + this.monthlyTotal);
+        addSubscription(new Subscription("Subscription 2", date1, 30));
+        //Log.d("UPDATE_MONTHLY_TOTAL", "new total = " + this.monthlyTotal);
+        addSubscription(new Subscription("Subscription 3", date1, 30));
+        addSubscription(new Subscription("Subscription 4", date1, 30));
+        addSubscription(new Subscription("Subscription 5", date1, 30));
+        addSubscription(new Subscription("Subscription 6", date1, 30));
+        addSubscription(new Subscription("Subscription 7", date1, 30));
+        addSubscription(new Subscription("Subscription 8", date1, 30));
+        addSubscription(new Subscription("Subscription 9", date1, 30));
+        addSubscription(new Subscription("Subscription 10", date1, 30));
+        addSubscription(new Subscription("Subscription 11", date1, 30));
+        addSubscription(new Subscription("Subscription 12", date1, 30));
+
+//        subscriptionList.add(new Subscription("wew", date1, 10));
         //ArrayAdapter<Subscription> myListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, subscriptionList);
-        ArrayAdapter<Subscription> myListAdapter = new SubscriptionRowAdapter(this, subscriptionList);
+//        ArrayAdapter<Subscription> myListAdapter = new SubscriptionRowAdapter(this, subscriptionList);
+        myListAdapter = new SubscriptionRowAdapter(this, subscriptionList);
 
 
         // () --> guy referred to this as "type cast"
@@ -181,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     // http://www.coderzheaven.com/2013/03/24/pass-object-finishing-activity-previous-activity-android/
     // 2018/02/02 (yyyy/mm/dd)
     @Override
@@ -192,6 +244,18 @@ public class MainActivity extends AppCompatActivity {
                 if (b != null) {
                     Subscription selectedItem = (Subscription) b.getSerializable("Obj");
                     Log.d("ON_ACTIVITY_RESULT", selectedItem.getName());
+                    if (selectedItem.getWasEdited() == 1) {
+                        Log.d("ON_ACTIVITY_RESULT", "selectedItem was edited");
+                        selectedItem.setWasEdited(0);
+                        /* edit the array list */
+                        updateSubscriptionList(selectedItem);
+                        this.myListAdapter.notifyDataSetChanged();
+
+                    }
+                    else {
+                        Log.d("ON_ACTIVITY_RESULT", "selectedItem was NOT edited");
+                    }
+
                 }
                 else if (resultCode == 0) {
                     //do something
@@ -205,12 +269,16 @@ public class MainActivity extends AppCompatActivity {
     /*
     replace old subscription with edited subscription in its original position
      */
-    private Subscription[] updateSubscriptionList(Subscription[] subscriptions, Subscription editedSubscription) {
+    private void updateSubscriptionList(Subscription editedSubscription) {
 
         int position = editedSubscription.getListViewPosition();
-        subscriptions[position] = editedSubscription;
-        return subscriptions;
+        this.subscriptionList.set(position, editedSubscription);
 
+    }
+
+    public void addSubscription(Subscription subscription){
+        this.monthlyTotal += subscription.getMonthlyCharge();
+        this.subscriptionList.add(subscription);
     }
 
     @Override

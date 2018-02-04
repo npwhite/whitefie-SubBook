@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -25,7 +26,7 @@ import java.util.Date;
 public class SubscriptionRowAdapter extends ArrayAdapter<Subscription>{
 
     // default given by pressing control + enter --> constructor
-    public SubscriptionRowAdapter(@NonNull Context context, Subscription[] subscriptionList) {
+    public SubscriptionRowAdapter(@NonNull Context context, ArrayList<Subscription> subscriptionList) {
         super(context, R.layout.subscription_row, subscriptionList);
 
     }

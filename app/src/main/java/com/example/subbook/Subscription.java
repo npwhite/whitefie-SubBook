@@ -15,6 +15,12 @@ public class Subscription implements Serializable{
     private String comment;         // Optional entry: up to 30 chars
 
     private int listViewPosition;
+    /*
+    1 or 0 --> flag which indicated if Subscription was edited when
+    returning from the view subscription activity
+    */
+    private int wasEdited;
+
 
     public Subscription(String name, Date dateStarted, int monthlyCharge) {
         // Constructor
@@ -58,6 +64,10 @@ public class Subscription implements Serializable{
         return listViewPosition;
     }
 
+    public int getWasEdited() {
+        return wasEdited;
+    }
+
     /* setters */
     public void changeName(String newName) {
         this.name = newName;
@@ -79,9 +89,7 @@ public class Subscription implements Serializable{
         this.listViewPosition = position;
     }
 
-
-
-
-
-
+    public void setWasEdited(int wasEdited) {
+        this.wasEdited = wasEdited;
+    }
 }
