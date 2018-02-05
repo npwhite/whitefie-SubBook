@@ -21,6 +21,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Pattern;
 
+/**
+ * represents the ViewSubscription activity
+ * @see Subscription
+ * @see MainActivity
+ */
 public class ViewSubscription extends AppCompatActivity {
 
     private String newName;
@@ -68,9 +73,7 @@ public class ViewSubscription extends AppCompatActivity {
          */
         String priceText = String.valueOf(selectedItem.getMonthlyCharge());
 
-        /*
-        Making a simple custom date formatter
-         */
+        /* Making a simple custom date formatter */
         SimpleDateFormat myDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dateText = myDateFormat.format(selectedItem.getDateStarted());
 
@@ -82,32 +85,29 @@ public class ViewSubscription extends AppCompatActivity {
         subscriptionViewDate.setText(dateText);
         subscriptionViewComment.setText(commentText);
 
+        /* on click listener for delete button */
         Button deleteButton = (Button) findViewById(R.id.deleteSubscription);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                /* user deleted entry  */
                 Intent intent = new Intent();
                 setResult(Activity.RESULT_CANCELED, intent);        // not sure if I should be using this result
 
-                finish();
+                finish();       /* return to previous activity */
 
             }
         });
 
+        /* on click listener for save button*/
         Button saveChangesButton = (Button) findViewById(R.id.saveChanges);
         saveChangesButton.setOnClickListener(new View.OnClickListener() {       // User trying to save changes
 
-            /* lonelyTwitter referenced*/
+            /* lonelyTwitter referenced */
             @Override
             public void onClick(View v) {       /* values changed only if all changed values meet criteria */
 
                 /* Get name text */
-                /*
-                User trying to save input as a new subscription
-                Needed: get input
-                Timer permits: error check it
-                */
                 newName = subscriptionViewName.getText().toString();
                 if (newName.isEmpty()) {
                     STATUS_VALUE = STATUS_INVALID;
@@ -120,14 +120,12 @@ public class ViewSubscription extends AppCompatActivity {
                     subscriptionViewName.setError("This field cannot be blank");
                 }
 
-
                 /* Get Date */
                 newTextDate = subscriptionViewDate.getText().toString();
                 boolean dateFormatValid = Pattern.matches("\\d\\d\\d\\d-\\d\\d-\\d\\d", newTextDate);
 
                 if (dateFormatValid) {
                     newDateDate = AddSubscription.parseStringToDate(newTextDate);
-//                    selectedItem.changeDate(dateDate);
                 } else {
                     STATUS_VALUE = STATUS_INVALID;
                     subscriptionViewDate.setError("Invalid Date, format: yyyy-mm-dd");
@@ -142,12 +140,9 @@ public class ViewSubscription extends AppCompatActivity {
                 try {
                     newPrice = Double.parseDouble(subscriptionViewPrice.getText().toString());
                 } catch (NullPointerException | NumberFormatException doubleParsExc) {
-                    // do something
                     STATUS_VALUE = STATUS_INVALID;
                     subscriptionViewPrice.setError("Invalid Price");
                 }
-
-                //}
 
                 /* Get Comment Text */
                 try {
@@ -158,61 +153,39 @@ public class ViewSubscription extends AppCompatActivity {
 
                 }
 
-
-
+                /* if the subscription object is safe to edit */
                 if (STATUS_VALUE == STATUS_VALID) {
+                    /* edit the subscription */
                     selectedItem.changeName(newName);
                     selectedItem.changeDate(newDateDate);
                     selectedItem.setMonthlyCharge(newPrice);
                     selectedItem.setComment(newComment);
 
+                    /* notify that subscription was edited*/
                     selectedItem.setWasEdited(1);
+
+                    /* create new intent and add edited item */
+                    /* onActivityResult */
                     Intent intent = new Intent();
                     intent.putExtra("Obj", selectedItem);
                     setResult(Activity.RESULT_OK, intent);
 
+                    /* return to previous activity*/
                     finish();
 
                 }
-
-                STATUS_VALUE = STATUS_VALID;        // Reset status to default
-
-
-
-
-
-
-
-
-//                selectedItem.setWasEdited(1);
+                STATUS_VALUE = STATUS_VALID;        /* Reset status to default */
                 Log.d("new name saved", selectedItem.getName());
-                //Intent editedSubscriptionIntent = new Intent(ViewSubscription.this, MainActivity.class);
-
-                // How to pass object into another activity:
-                // https://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android
-                // user's Samuh, Peter Mortensen, Mustafa Güven
-                // 2018/01/29
-                //-->editedSubscriptionIntent.putExtra("edited_Subscription", selectedItem);
-
-                //Intent intent = new Intent();
-                //intent.putExtra("obj",selectedItem);
-                //setResult(Activity.RESULT_OK,intent);
-                //finish();
-                //startActivity(editedSubscriptionIntent);
-
-//                Intent intent = new Intent();
-//                intent.putExtra("Obj", selectedItem);
-//                setResult(Activity.RESULT_OK, intent);
-//
-//                finish();
             }
-
-
         });
     }
 
     // http://www.coderzheaven.com/2013/03/24/pass-object-finishing-activity-previous-activity-android/
     // 2018/02/02 (yyyy/mm/dd)
+
+    /**
+     * execute if back button pressed
+     */
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
@@ -221,10 +194,5 @@ public class ViewSubscription extends AppCompatActivity {
         finish();
         super.onBackPressed();
     }
-
-    //subText.setText(nameText, TextView.BufferType.NORMAL);
-    //Log.d("OBJECT_PASSED", "Subscription passed: " + selectedItem.getName());
-
-
 }
 

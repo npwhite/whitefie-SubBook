@@ -32,18 +32,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-//import static android.provider.Telephony.Mms.Part.FILENAME;
-
 
 /*
-
-    --> PL WARNING
-    --> I should probably consider this to be practice, as most of what I have added was copied
-        from examples online
-    --> Need to do:
-
-
-
 
     My To Do List:
     --> NEED TO DO:
@@ -62,10 +52,14 @@ import com.google.gson.reflect.TypeToken;
 
  */
 
-
+/**
+ * represents the subBook activity
+ * @see Subscription
+ * @see AddSubscription
+ * @see ViewSubscription
+ * @see SubscriptionRowAdapter
+ */
 public class MainActivity extends AppCompatActivity {
-
-    //private  ArrayList<Subscription>  subscriptionList;
 
     /*
     Fixes problem when trying to add object to null array list
@@ -75,138 +69,44 @@ public class MainActivity extends AppCompatActivity {
      */
     private static final String FILENAME = "subscriptions.sav";
     private ArrayList<Subscription> subscriptionList = new ArrayList<Subscription>();     // need to initialize first
-    private double monthlyTotal = 0;
+    private double monthlyTotal;
     private TextView monthlyTotalTV;
     private ArrayAdapter<Subscription> myListAdapter; //= new SubscriptionRowAdapter(this, subscriptionList);
     private int lastClickedItem = -1;
 
-    //Date date1 = new Date();
-
-//    public MainActivity() {
-//        //this.subscriptionList = {new Subscription("Sub Object 1", date1, 10)};
-//        this.subscriptionList = {
-//                new Subscription("Sub Object 1", date1, 10),
-//                new Subscription("Sub Object 2", date1, 15),
-//                new Subscription("Sub Object 3", date1, 30),
-//                new Subscription("Sub Object 4", date1, 30),
-//                new Subscription("Sub Object 5", date1, 30),
-//                new Subscription("Sub Object 6", date1, 30),
-//                new Subscription("Sub Object 7", date1, 30),
-//                new Subscription("Sub Object 8", date1, 30),
-//                new Subscription("Sub Object 9", date1, 30),
-//                new Subscription("Sub Object 10", date1, 30),
-//                new Subscription("Sub Object 11", date1, 30),
-//                new Subscription("Sub Object 12", date1, 30),
-//                new Subscription("Sub Object 13", date1, 30),
-//        };
-//    }
-
-
-    //private ListView subscriptionList;
-
-    // Output a simple list (non-interact-able) using ListView and Adapter?
-    // --> output String array
-
-    // youtube video --> https://www.youtube.com/watch?v=A-_hKWMA7mk
-    // --> simple_list_item_1 is just a default list view output in the layout xml file
-    // --> String indicated that the array contains strings
-    // listAdapter converts array into something that can be viewed as a List
-//    private String[] subscriptionList = {"Subscription 1", "Subscription 2", "Subscription 3",
-//        "Subscription 4", "Subscription 5", "Subscription 6", "Subscription 7", "Subscription 8",
-//        "Subscription 9", "Subscription 10", "Subscription 11", "Subscription 12", "Subscription 13"};
-    //private ArrayList<Subscription> subscriptionList;
-
-//    ListAdapter myListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, subscriptionList);
-//    // () --> guy referred to this as "type cast"
-//    ListView myListView = (ListView) findViewById(R.id.myListView);
-//    myListView.setAdapter(myListAdapter);
-
+    /**
+    On create method
+    @param savedInstanceState saved instance of previous run
+    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadFromFile();
+        /* load data from previous run*/
+        loadFromFile();    
 
-
-
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.mainToolbar);
-
-        //setSupportActionBar(toolbar);
-
-        //Test Subscription 1
-        //Date date1 = new Date();
-        //Subscription sub1 = new Subscription("Sub object 1", date1, 10);
-        //subscriptionList.add(sub1);
-
-        // make subscription a constructor variable
-        // this.subscription
-        Date date1 = new Date();
-
-//        Subscription[] subscriptionList = {
-//                new Subscription("wew", date1, 10),
-//                new Subscription("Sub Object 2", date1, 15),
-//                new Subscription("Sub Object 3", date1, 30),
-//                new Subscription("Sub Object 4", date1, 30),
-//                new Subscription("Sub Object 5", date1, 30),
-//                new Subscription("Sub Object 6", date1, 30),
-//                new Subscription("Sub Object 7", date1, 30),
-//                new Subscription("Sub Object 8", date1, 30),
-//                new Subscription("Sub Object 9", date1, 30),
-//                new Subscription("Sub Object 10", date1, 30),
-//                new Subscription("Sub Object 11", date1, 30),
-//                new Subscription("Sub Object 12", date1, 30),
-//                new Subscription("Sub Object 13", date1, 30),
-//        };
-
-
-//******addSubscription(new Subscription("Netflix", date1, 9.00));
-        //Log.d("UPDATE_MONTHLY_TOTAL", "new total = " + this.monthlyTotal);
-//        addSubscription(new Subscription("Subscription 1", date1, 15.0));
-//        //Log.d("UPDATE_MONTHLY_TOTAL", "new total = " + this.monthlyTotal);
-//        addSubscription(new Subscription("Subscription 2", date1, 30.0));
-//        //Log.d("UPDATE_MONTHLY_TOTAL", "new total = " + this.monthlyTotal);
-//        addSubscription(new Subscription("Subscription 3", date1, 30.0));
-//        addSubscription(new Subscription("Subscription 4", date1, 30.));
-//        addSubscription(new Subscription("Subscription 5", date1, 30.0));
-//        addSubscription(new Subscription("Subscription 6", date1, 30.0));
-//        addSubscription(new Subscription("Subscription 7", date1, 30.0));
-//        addSubscription(new Subscription("Subscription 8", date1, 30.0));
-//        addSubscription(new Subscription("Subscription 9", date1, 30.0));
-//        addSubscription(new Subscription("Subscription 10", date1, 30.0));
-//        addSubscription(new Subscription("Subscription 11", date1, 30.0));
-//        addSubscription(new Subscription("Subscription 12", date1, 30.0));
-
-//        subscriptionList.add(new Subscription("wew", date1, 10));
-        //ArrayAdapter<Subscription> myListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, subscriptionList);
-//        ArrayAdapter<Subscription> myListAdapter = new SubscriptionRowAdapter(this, subscriptionList);
         myListAdapter = new SubscriptionRowAdapter(this, subscriptionList);
-
         monthlyTotalTV = findViewById(R.id.mainMonthlyTotal);
-        this.updateMonthlyCharge();  // just for testing, remove later
-
-        //monthlyTotalTV.setText("Monthly Cost: " + monthlyTotalText);
-
-        // () --> guy referred to this as "type cast"
+        /* update monthly charge text view to proper value */
+        updateMonthlyCharge();
+        
         ListView myListView = findViewById(R.id.myListView);
         myListView.setAdapter(myListAdapter);
 
-
+        /* floating action button which takes user to create subscription activity*/
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
                 Intent addSubscriptionIntent = new Intent(MainActivity.this, AddSubscription.class);
-//                startActivity(new Intent(MainActivity.this, AddSubscription.class));
                 startActivityForResult(addSubscriptionIntent, 2);
 
             }
         });
 
+        /* click listener which takes user to view subscription for selected subscription */
         // example on how to set a click listener onto a ListView/AdapterView
         // https://android--code.blogspot.ca/2015/08/android-listview-item-click.html 2018/01/28
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -214,143 +114,127 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Subscription selectedItem = (Subscription) adapterView.getItemAtPosition(i);
                 selectedItem.setListViewPosition(i);
+                /* store last clicked item so if user deletes subscription, we know which position it was in*/
                 lastClickedItem = i;
 
-                String itemName = selectedItem.getName();
-                Log.d("ITEM_SELECTED", "The item selected was" + itemName);
-                Log.d("ITEM_POSITION", "The item position is" + i);
-         //==============
-                // https://stackoverflow.com/questions/24610527/how-do-i-get-a-button-to-open-another-activity-in-android-studio
-                // how to start a new Activity 2018/01/28
-                //startActivity(new Intent(MainActivity.this, ViewSubscription.class));
-
-                // Start new activity --> slightly modified by me to allow myself to pass subscription object into
-                // new activity
-                //*Intent viewSubscriptionIntent = new Intent(MainActivity.this, ViewSubscription.class);
-
-                // How to pass object into another activity:
-                // https://stackoverflow.com/questions/2736389/how-to-pass-an-object-from-one-activity-to-another-on-android
-                // user's Samuh, Peter Mortensen, Mustafa Güven
-                // 2018/01/29
-                //-->viewSubscriptionIntent.putExtra("Selected_Subscription", selectedItem);
-                //-->startActivity(viewSubscriptionIntent);
-
-
-
-
-                // ---> newest attempt --> not working. try to fix
-                // http://www.coderzheaven.com/2013/03/24/pass-object-finishing-activity-previous-activity-android/
-                //*viewSubscriptionIntent.putExtra("Selected_Subscription", selectedItem);
-                //*startActivityForResult(viewSubscriptionIntent, 1);
-                //Log.d("RETURN", "returned from view subscription activity");
-
-                // http://www.coderzheaven.com/2013/03/24/pass-object-finishing-activity-previous-activity-android/
-                // 2018/02/02 (yyyy/mm/dd)
+                /*
+                http://www.coderzheaven.com/2013/03/24/pass-object-finishing-activity-previous-activity-android
+                2018/02/02 (yyyy/mm/dd)
+                CODERZHEAVEN
+                 */
                 Intent intent = new Intent(MainActivity.this, ViewSubscription.class);
                 intent.putExtra("myobject", selectedItem);
                 startActivityForResult(intent, 1);
 
-
             }
         });
-
-
     }
 
 
-    /*
-     Called when an activity returns to its previous activity
-     https://stackoverflow.com/questions/11946271/android-detect-when-an-activity-returns-to-the-previous-activity
-     User: JiTHiN
-     2018/02/02 (yyyy/mm/dd)
-    */
+    /**
+     * Called when user returns from child activity
+     */
     @Override
     protected void onResume() {
         super.onResume();
         Log.d("RETURN", "returned from view subscription activity");
-        //Subscription editedItem = (Subscription) getIntent().getSerializableExtra("edited_Subscription");
-        //String nameText = (String) editedItem.getName();
-        //Log.d("MAIN ACT", nameText);
-
     }
 
 
-    // http://www.coderzheaven.com/2013/03/24/pass-object-finishing-activity-previous-activity-android/
-    // 2018/02/02 (yyyy/mm/dd)
+    /*
+    http://www.coderzheaven.com/2013/03/24/pass-object-finishing-activity-previous-activity-android/
+    2018/02/02 (yyyy/mm/dd)
+    CODERZHEAVEN
+    */
+
+    /**
+     * represents
+     * @param requestCode code of what activity we are requesting/info we want
+     * @param resultCode what the activity returned
+     * @param data data in an intent
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == 1) { //requesting view subscription
             if (resultCode == Activity.RESULT_OK) {
                 Bundle b = data.getExtras();
                 if (b != null) {
+                    /* retrieve selected item from view subscription activity */
                     Subscription selectedItem = (Subscription) b.getSerializable("Obj");
-                    Log.d("ON_ACTIVITY_RESULT", selectedItem.getName());
                     if (selectedItem.getWasEdited() == 1) {
-                        Log.d("ON_ACTIVITY_RESULT", "selectedItem was edited");
+                        /* User edited the selected subscription */
+
+                        /* reset was edited for item */
                         selectedItem.setWasEdited(0);
-                        /* edit the array list */
+                        /* update the array list with updated subscription */
                         updateSubscriptionList(selectedItem);
                         this.updateMonthlyCharge();
                         this.myListAdapter.notifyDataSetChanged();
                         saveInFile();
-
                     }
                     else {
+                        /* User did NOT edit selected item*/
                         Log.d("ON_ACTIVITY_RESULT", "selectedItem was NOT edited");
                     }
 
                 }
-//                else if (resultCode == 0) {
-//                    // do something
-//                    Log.d("MAIN_RC_0", "Back to main, result code 0");
-//                }
 
-            } else if (resultCode == 0) {           // User deleted item
-                Log.d("MAIN_RC_0", "Back to main, result code 0");
+            } else if (resultCode == 0) {           /* User deleted item */
                 this.subscriptionList.remove(this.lastClickedItem);
                 this.updateMonthlyCharge();
                 this.myListAdapter.notifyDataSetChanged();
-                this.lastClickedItem = -1;
+                this.lastClickedItem = -1;          /* reset lastClickedItem to default */
                 saveInFile();
 
             }
         }
 
-        else if (requestCode == 2) {    // requesting add subscription
-            if (resultCode == Activity.RESULT_OK) {     // the user added a subscription SUCCESSFULLY
-                Bundle b = data.getExtras();
+        else if (requestCode == 2) {    /* requesting add subscription */
+            if (resultCode == Activity.RESULT_OK) {     /* the user added a subscription SUCCESSFULLY */
+                Bundle b = data.getExtras();            /* unpack the bundle */
                 if (b != null) {
+                    /* subscription created */
                     Subscription newSubscription = (Subscription) b.getSerializable("newSubscription");
+                    /* add subscription to array list */
                     addSubscription(newSubscription);
                     this.updateMonthlyCharge();
-                    //add_subtractMonthlyCost(newSubscription.getMonthlyCharge());
-                    //this.monthlyTotalTV.setText("Monthly Cost: " + this.monthlyTotal);
                     this.myListAdapter.notifyDataSetChanged();
+                    /* save */
                     saveInFile();
                 }
 
             }
-            else if(resultCode == Activity.RESULT_CANCELED) {   // the user BACKED OUT
-                // do something
+            else if(resultCode == Activity.RESULT_CANCELED) {
+                /* The user backed out */
             }
 
 
         }
 
 
-    }//onActivityResult
+    }
 
     /*
     replace old subscription with edited subscription in its original position
      */
+
+    /**
+     * replace old subscription with edited subscription in its original position
+     * @param editedSubscription the edited subscription
+     */
     private void updateSubscriptionList(Subscription editedSubscription) {
 
         int position = editedSubscription.getListViewPosition();
+        /* note: position is properly edited in listView click */
         this.subscriptionList.set(position, editedSubscription);
 
     }
 
+    /**
+     * refreshes monthlyCharge text view to current monthly total
+     */
     public void updateMonthlyCharge (){
         String monthlyTotalText;
         this.monthlyTotal = 0;
@@ -368,10 +252,15 @@ public class MainActivity extends AppCompatActivity {
         this.monthlyTotalTV.setText("Monthly Total: " + monthlyTotalText);
     }
 
+    /**
+     * add a new subscription to the array
+     * @param subscription subscription object
+     */
     public void addSubscription(Subscription subscription){
         this.monthlyTotal += subscription.getMonthlyCharge();
         this.subscriptionList.add(subscription);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -395,20 +284,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    @Override
-//    protected void onStart() {
-//
-//        // TODO Auto-generated method stub
-//        super.onStart();
-//        Log.i("LifeCycle --->", "onStart is called");
-//
-//        loadFromFile();
-//
-//        adapter = new ArrayAdapter<Tweet>(this, R.layout.list_item, tweetList);
-//        oldTweetsList.setAdapter(adapter);
-//
-//    }
-
+    /*
+    taken verbatim from lonely twitter
+    University of Alberta
+     */
     private void loadFromFile() {
 
         try {
@@ -428,6 +307,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /*
+    taken verbatim from lonely twitter
+    University of Alberta
+     */
     public void saveInFile() {
         try {
 

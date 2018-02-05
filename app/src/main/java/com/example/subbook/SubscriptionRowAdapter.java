@@ -21,22 +21,23 @@ import java.util.Date;
  * Created by Nick on 2018-01-30.
  */
 
-// simple_list_item_1 used in simple adapter works well with simple strings, but in order to
-// use my custom Subscription objects, need to make a custom Adapter
+/**
+ * represents a custom row adapter
+ */
 public class SubscriptionRowAdapter extends ArrayAdapter<Subscription>{
 
-    // default given by pressing control + enter --> constructor
+    /* default given by pressing control + enter --> constructor */
     public SubscriptionRowAdapter(@NonNull Context context, ArrayList<Subscription> subscriptionList) {
         super(context, R.layout.subscription_row, subscriptionList);
-
     }
 
     // found in control + enter --> Override methods
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        /* creates a custom row that is copied for each row in the listView */
+        /* xml layout in subscription_row.xml */
 
-        // "How android deals with laying things out on your activity"
         LayoutInflater subscriptionListInflater = LayoutInflater.from(getContext());
         View subscriptionRowView = subscriptionListInflater.inflate(R.layout.subscription_row, parent, false);
 
@@ -50,9 +51,7 @@ public class SubscriptionRowAdapter extends ArrayAdapter<Subscription>{
 
         subName.setText(subscriptionName);
         String ct = DateFormat.getDateInstance().format(subscriptionDate);
-        //subDate.setText(String.format(subscriptionDate));
         subDate.setText(String.format(ct));
-        //subPrice.setText(String.valueOf(subscriptionPrice));
         subPrice.setText(String.format("%.02f", subscriptionPrice));
         return subscriptionRowView;
 

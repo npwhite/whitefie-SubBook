@@ -14,6 +14,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Pattern;
 
+/**
+ * represents AddSubscription activity
+ * @see Subscription
+ * @see MainActivity
+ */
 public class AddSubscription extends AppCompatActivity {
 
     private String nameText;
@@ -28,9 +33,7 @@ public class AddSubscription extends AppCompatActivity {
     private boolean STATUS_VALUE = STATUS_VALID;   // status of creation safety value
 
 
-    // Had this error before:
-    // Variable is accessed within inner class. Needs to be declared final
-    // referenced lonelyTwitter --> declare text boxes outside of method? why?
+    /* referenced lonelyTwitter */
     private EditText subscriptionAddName;
     private EditText subscriptionAddPrice;
     private EditText subscriptionAddDate;
@@ -48,18 +51,12 @@ public class AddSubscription extends AppCompatActivity {
         subscriptionAddDate = findViewById(R.id.subscriptionAddDate);
         subscriptionAddComment = findViewById(R.id.subscriptionAddComment);
 
-
+        /* on click listener for add subscription button*/
         addSubscriptionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                /* user trying to add subscription */
                 Log.d("ADD_SUBSCRIPTION", "Add subscription button pressed");
-
-                /* Get name text */
-                /*
-                User trying to save input as a new subscription
-                Needed: get input
-                Timer permits: error check it
-                */
 
                 nameText = subscriptionAddName.getText().toString();
 
@@ -84,13 +81,10 @@ public class AddSubscription extends AppCompatActivity {
                 try {
                     priceText = Double.parseDouble(subscriptionAddPrice.getText().toString());
                 } catch (NullPointerException | NumberFormatException doubleParsExc) {
-                    // do something
                     STATUS_VALUE = STATUS_INVALID;
                     subscriptionAddPrice.setError("Invalid Price");
                 }
 
-                /* Get Date */
-                //try {
                 TextDate = subscriptionAddDate.getText().toString();
                 boolean dateFormatValid = Pattern.matches("\\d\\d\\d\\d-\\d\\d-\\d\\d", TextDate);
 
@@ -100,40 +94,33 @@ public class AddSubscription extends AppCompatActivity {
                     STATUS_VALUE = STATUS_INVALID;
                     subscriptionAddDate.setError("Invalid Date, format: yyyy-mm-dd");
                 }
-                //} catch (NullPointerException badDateExc) {
-                    // do something
-
-
-                //}
 
                 /* Get Comment Text */
                 try {
                     commentText = subscriptionAddComment.getText().toString();
                 } catch (NullPointerException badCommentExc) {
-                    // do something
+                    // this will never happen
                     STATUS_VALUE = STATUS_INVALID;
 
                 }
 
+                /* if subscription is safe to make */
                 if (STATUS_VALUE == STATUS_VALID) {
-                    Log.d("MAKING_SUBSCRIPTION", "Trying to make a subscription");
+                    /* create subscription object */
                     Subscription newSubscription = new Subscription(nameText, DateDate, priceText, commentText);
                     Log.d("SUBSCRIPTION CREATED", "New subscription made: " + newSubscription.getName());
 
+                    /* return the new subscription back to the previous activity*/
+                    /* goes to onActivityResult */
                     Intent intent = new Intent();
                     intent.putExtra("newSubscription", newSubscription);
                     setResult(Activity.RESULT_OK, intent);
 
                     finish();
                 }
-
                 STATUS_VALUE = STATUS_VALID;        // Reset status to default
-
-
             }
         });
-
-        // if back button pressed --> RESULT_CANCELLED --> add later
     }
 
     /*
@@ -142,8 +129,13 @@ public class AddSubscription extends AppCompatActivity {
     2018/02/04 (yyyy/mm/dd)
     Boris Strandjev
      */
-    public static Date parseStringToDate(String dateText) {
 
+    /**
+     * convert a type String to a type Date
+     * @param dateText the String to convert
+     * @return if successful, a new Date
+     */
+    public static Date parseStringToDate(String dateText) {
         SimpleDateFormat myDateFormat = new SimpleDateFormat("yyyy-MM-d");
         Date newDate = new Date();
         try {
@@ -151,9 +143,6 @@ public class AddSubscription extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         return newDate;
-
     }
-
 }
