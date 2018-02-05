@@ -8,7 +8,7 @@
 
     <EditText
         android:id="@+id/subscriptionAddDate"
-        android:layout_width="214dp"
+        android:layout_width="230dp"
         android:layout_height="70dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
@@ -32,13 +32,16 @@
 
     <EditText
         android:id="@+id/subscriptionAddName"
-        android:layout_width="214dp"
+        android:layout_width="230dp"
         android:layout_height="70dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="@string/add_subscription_name"
         android:inputType="textPersonName"
+        android:maxLength="20"
+        android:textAlignment="textStart"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,6 +54,7 @@
         android:ems="10"
         android:hint="@string/add_subscription_price"
         android:inputType="numberDecimal"
+        android:textAlignment="textEnd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,7 +68,9 @@
         android:ems="10"
         android:hint="@string/add_subscription_comment"
         android:inputType="textMultiLine"
+        android:maxLength="30"
         android:singleLine="false"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"

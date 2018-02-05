@@ -1,18 +1,24 @@
 package com.example.subbook;
 
-import java.io.Serializable;
-import java.text.DecimalFormat;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -20,10 +26,14 @@ import android.view.MenuItem;
 
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+//import static android.provider.Telephony.Mms.Part.FILENAME;
+
 
 /*
 
@@ -37,12 +47,8 @@ import android.widget.Toast;
 
     My To Do List:
     --> NEED TO DO:
-        * TODO PRIORITY --> SAVE AND LOAD INFORMATION
-        * TODO PRIORITY --> Delete subscription
-        * TODO --> monthly sum total
 
     --> SHOULD DO:
-        * TODO --> Constraints: limit edit text to certain character amount
         * TODO --> Double, triple check citations
 
     --> COULD DO:
@@ -67,10 +73,12 @@ public class MainActivity extends AppCompatActivity {
     2018/02/03 (yyyy/mm/dd)
     Jens
      */
+    private static final String FILENAME = "subscriptions.sav";
     private ArrayList<Subscription> subscriptionList = new ArrayList<Subscription>();     // need to initialize first
     private double monthlyTotal = 0;
     private TextView monthlyTotalTV;
     private ArrayAdapter<Subscription> myListAdapter; //= new SubscriptionRowAdapter(this, subscriptionList);
+    private int lastClickedItem = -1;
 
     //Date date1 = new Date();
 
@@ -119,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        loadFromFile();
+
 
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.mainToolbar);
@@ -151,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
 //        };
 
 
-        addSubscription(new Subscription("Netflix", date1, 9.00));
+//******addSubscription(new Subscription("Netflix", date1, 9.00));
         //Log.d("UPDATE_MONTHLY_TOTAL", "new total = " + this.monthlyTotal);
 //        addSubscription(new Subscription("Subscription 1", date1, 15.0));
 //        //Log.d("UPDATE_MONTHLY_TOTAL", "new total = " + this.monthlyTotal);
@@ -204,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Subscription selectedItem = (Subscription) adapterView.getItemAtPosition(i);
                 selectedItem.setListViewPosition(i);
+                lastClickedItem = i;
 
                 String itemName = selectedItem.getName();
                 Log.d("ITEM_SELECTED", "The item selected was" + itemName);
@@ -282,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
                         updateSubscriptionList(selectedItem);
                         this.updateMonthlyCharge();
                         this.myListAdapter.notifyDataSetChanged();
+                        saveInFile();
 
                     }
                     else {
@@ -289,9 +301,19 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }
-                else if (resultCode == 0) {
-                    // do something
-                }
+//                else if (resultCode == 0) {
+//                    // do something
+//                    Log.d("MAIN_RC_0", "Back to main, result code 0");
+//                }
+
+            } else if (resultCode == 0) {           // User deleted item
+                Log.d("MAIN_RC_0", "Back to main, result code 0");
+                this.subscriptionList.remove(this.lastClickedItem);
+                this.updateMonthlyCharge();
+                this.myListAdapter.notifyDataSetChanged();
+                this.lastClickedItem = -1;
+                saveInFile();
+
             }
         }
 
@@ -305,6 +327,7 @@ public class MainActivity extends AppCompatActivity {
                     //add_subtractMonthlyCost(newSubscription.getMonthlyCharge());
                     //this.monthlyTotalTV.setText("Monthly Cost: " + this.monthlyTotal);
                     this.myListAdapter.notifyDataSetChanged();
+                    saveInFile();
                 }
 
             }
@@ -371,4 +394,59 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+//    @Override
+//    protected void onStart() {
+//
+//        // TODO Auto-generated method stub
+//        super.onStart();
+//        Log.i("LifeCycle --->", "onStart is called");
+//
+//        loadFromFile();
+//
+//        adapter = new ArrayAdapter<Tweet>(this, R.layout.list_item, tweetList);
+//        oldTweetsList.setAdapter(adapter);
+//
+//    }
+
+    private void loadFromFile() {
+
+        try {
+            FileInputStream fis = openFileInput(FILENAME);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+
+            Gson gson = new Gson();
+
+            // Taken https://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt
+            // 2018-01-23
+            Type listType = new TypeToken<ArrayList<Subscription>>(){}.getType();
+            subscriptionList = gson.fromJson(in, listType);
+
+        } catch (FileNotFoundException e) {
+            subscriptionList = new ArrayList<Subscription>();
+        }
+
+    }
+
+    public void saveInFile() {
+        try {
+
+            FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+
+            Gson gson = new Gson();
+            gson.toJson(this.subscriptionList, out);
+            out.flush();
+
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+    }
+
+
 }
+

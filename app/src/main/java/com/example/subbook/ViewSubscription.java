@@ -88,7 +88,7 @@ public class ViewSubscription extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent intent = new Intent();
-                setResult(Activity.RESULT_OK, intent);
+                setResult(Activity.RESULT_CANCELED, intent);        // not sure if I should be using this result
 
                 finish();
 
