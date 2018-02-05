@@ -1,6 +1,7 @@
 package com.example.subbook;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -21,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /*
@@ -36,12 +38,11 @@ import android.widget.Toast;
     My To Do List:
     --> NEED TO DO:
         * TODO PRIORITY --> SAVE AND LOAD INFORMATION
+        * TODO PRIORITY --> Delete subscription
         * TODO --> monthly sum total
 
     --> SHOULD DO:
-        * TODO --> allow user to add date themself
-        * TODO --> Constraints: Types, character limits, non-null, etc
-        * TODO --> Finish view_subscription.xml
+        * TODO --> Constraints: limit edit text to certain character amount
         * TODO --> Double, triple check citations
 
     --> COULD DO:
@@ -67,7 +68,8 @@ public class MainActivity extends AppCompatActivity {
     Jens
      */
     private ArrayList<Subscription> subscriptionList = new ArrayList<Subscription>();     // need to initialize first
-    private int monthlyTotal = 0;
+    private double monthlyTotal = 0;
+    private TextView monthlyTotalTV;
     private ArrayAdapter<Subscription> myListAdapter; //= new SubscriptionRowAdapter(this, subscriptionList);
 
     //Date date1 = new Date();
@@ -118,7 +120,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.mainToolbar);
+
         //setSupportActionBar(toolbar);
 
         //Test Subscription 1
@@ -128,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
         // make subscription a constructor variable
         // this.subscription
-         Date date1 = new Date();
+        Date date1 = new Date();
 
 //        Subscription[] subscriptionList = {
 //                new Subscription("wew", date1, 10),
@@ -147,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 //        };
 
 
-        addSubscription(new Subscription("Netflix", date1, 9.99));
+        addSubscription(new Subscription("Netflix", date1, 9.00));
         //Log.d("UPDATE_MONTHLY_TOTAL", "new total = " + this.monthlyTotal);
 //        addSubscription(new Subscription("Subscription 1", date1, 15.0));
 //        //Log.d("UPDATE_MONTHLY_TOTAL", "new total = " + this.monthlyTotal);
@@ -169,6 +173,10 @@ public class MainActivity extends AppCompatActivity {
 //        ArrayAdapter<Subscription> myListAdapter = new SubscriptionRowAdapter(this, subscriptionList);
         myListAdapter = new SubscriptionRowAdapter(this, subscriptionList);
 
+        monthlyTotalTV = findViewById(R.id.mainMonthlyTotal);
+        this.updateMonthlyCharge();  // just for testing, remove later
+
+        //monthlyTotalTV.setText("Monthly Cost: " + monthlyTotalText);
 
         // () --> guy referred to this as "type cast"
         ListView myListView = findViewById(R.id.myListView);
@@ -272,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
                         selectedItem.setWasEdited(0);
                         /* edit the array list */
                         updateSubscriptionList(selectedItem);
+                        this.updateMonthlyCharge();
                         this.myListAdapter.notifyDataSetChanged();
 
                     }
@@ -292,6 +301,9 @@ public class MainActivity extends AppCompatActivity {
                 if (b != null) {
                     Subscription newSubscription = (Subscription) b.getSerializable("newSubscription");
                     addSubscription(newSubscription);
+                    this.updateMonthlyCharge();
+                    //add_subtractMonthlyCost(newSubscription.getMonthlyCharge());
+                    //this.monthlyTotalTV.setText("Monthly Cost: " + this.monthlyTotal);
                     this.myListAdapter.notifyDataSetChanged();
                 }
 
@@ -314,6 +326,23 @@ public class MainActivity extends AppCompatActivity {
         int position = editedSubscription.getListViewPosition();
         this.subscriptionList.set(position, editedSubscription);
 
+    }
+
+    public void updateMonthlyCharge (){
+        String monthlyTotalText;
+        this.monthlyTotal = 0;
+        for (Subscription element: this.subscriptionList) {
+            this.monthlyTotal += element.getMonthlyCharge();
+        }
+
+        /*
+        floating point precision change
+        https://stackoverflow.com/questions/4391448/floating-point-with-2-digits-after-point
+        2018/02/04
+        Ryan Reeves
+         */
+        monthlyTotalText = String.format("%.02f", this.monthlyTotal);
+        this.monthlyTotalTV.setText("Monthly Total: " + monthlyTotalText);
     }
 
     public void addSubscription(Subscription subscription){

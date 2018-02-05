@@ -82,6 +82,19 @@ public class ViewSubscription extends AppCompatActivity {
         subscriptionViewDate.setText(dateText);
         subscriptionViewComment.setText(commentText);
 
+        Button deleteButton = (Button) findViewById(R.id.deleteSubscription);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent();
+                setResult(Activity.RESULT_OK, intent);
+
+                finish();
+
+            }
+        });
+
         Button saveChangesButton = (Button) findViewById(R.id.saveChanges);
         saveChangesButton.setOnClickListener(new View.OnClickListener() {       // User trying to save changes
 

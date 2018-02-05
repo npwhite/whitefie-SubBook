@@ -52,7 +52,8 @@ public class SubscriptionRowAdapter extends ArrayAdapter<Subscription>{
         String ct = DateFormat.getDateInstance().format(subscriptionDate);
         //subDate.setText(String.format(subscriptionDate));
         subDate.setText(String.format(ct));
-        subPrice.setText(String.valueOf(subscriptionPrice));
+        //subPrice.setText(String.valueOf(subscriptionPrice));
+        subPrice.setText(String.format("%.02f", subscriptionPrice));
         return subscriptionRowView;
 
     }
