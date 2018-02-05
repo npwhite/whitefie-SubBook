@@ -5,6 +5,6 @@
     <string name="add_subscription">Add Subscription</string>
     <string name="add_subscription_name">Subscription Name</string>
     <string name="add_subscription_price">Cost/Month</string>
-    <string name="add_subscription_date">Date Started</string>
+    <string name="add_subscription_date">Date Started (yyyy-mm-dd)</string>
     <string name="add_subscription_comment">Comment (Optional)</string>
 </resources>

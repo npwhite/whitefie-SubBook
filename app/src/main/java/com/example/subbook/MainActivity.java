@@ -29,11 +29,29 @@ import android.widget.Toast;
     --> I should probably consider this to be practice, as most of what I have added was copied
         from examples online
     --> Need to do:
-          * clicking on Subscription object opens proper view for that object
-          * + symbol opens window to create new Subscription
 
-        Should do:
-          * check user input to make sure it meets constraints
+
+
+
+    My To Do List:
+    --> NEED TO DO:
+        * TODO PRIORITY --> SAVE AND LOAD INFORMATION
+        * TODO --> monthly sum total
+
+    --> SHOULD DO:
+        * TODO --> allow user to add date themself
+        * TODO --> Constraints: Types, character limits, non-null, etc
+        * TODO --> Finish view_subscription.xml
+        * TODO --> Double, triple check citations
+
+    --> COULD DO:
+        * TODO --> Change date input to date picker (Guarantee's proper input)
+
+    Misc:
+      * A better design would have been merging view subscription and add subscription into one activity
+      * add subscription would have made an empty subscription object, and showed empty attributes
+      * then add the object into the array only if it met the criteria
+
 
  */
 
@@ -49,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     Jens
      */
     private ArrayList<Subscription> subscriptionList = new ArrayList<Subscription>();     // need to initialize first
-    private int monthlyTotal;
+    private int monthlyTotal = 0;
     private ArrayAdapter<Subscription> myListAdapter; //= new SubscriptionRowAdapter(this, subscriptionList);
 
     //Date date1 = new Date();
