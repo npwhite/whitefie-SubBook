@@ -34,22 +34,18 @@ import com.google.gson.reflect.TypeToken;
 
 
 /*
-
     My To Do List:
     --> NEED TO DO:
 
     --> SHOULD DO:
-        * TODO --> Double, triple check citations
 
     --> COULD DO:
         * TODO --> Change date input to date picker (Guarantee's proper input)
 
     Misc:
-      * A better design would have been merging view subscription and add subscription into one activity
-      * add subscription would have made an empty subscription object, and showed empty attributes
-      * then add the object into the array only if it met the criteria
-
-
+      * A possibly better design would have been merging view subscription and add subscription into
+        one activity add subscription would have made an empty subscription object, and showed empty
+        attributes then add the object into the array only if it met the criteria
  */
 
 /**
